@@ -4,8 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'message.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -24,6 +23,7 @@ class _MyHomePageState extends State<MyHomePage> {
     TextEditingController controller = TextEditingController();
     return Scaffold(
       appBar: AppBar(
+        elevation: 1,
         centerTitle: false,
         backgroundColor: Theme.of(context).colorScheme.surface,
         title: Row(
@@ -33,15 +33,16 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 Image.asset('assets/robot.png', width: 32),
                 const SizedBox(width: 12),
-                const Text('Gemini GPT', style: TextStyle(color: Colors.black54))
+                Text('Gemini GPT', style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold))
               ],
             ),
-            IconButton(onPressed: () {}, icon: Icon(Icons.volume_up_outlined, color: Theme.of(context).colorScheme.primary,))
+            IconButton(onPressed: () {}, icon: Icon(Icons.volume_up_outlined, color: Theme.of(context).colorScheme.primary))
           ],
         ),
       ),
       body: Column(
         children: [
+          const SizedBox(height: 8),
           Expanded(
             child: ListView.builder(
               itemCount: _message.length,
@@ -53,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: message.isUser ? Colors.blue : Colors.grey[300],
+                        color: message.isUser ? Theme.of(context).colorScheme.primary : Colors.grey[300],
                         borderRadius: message.isUser ? const BorderRadius.only(
                             topLeft: Radius.circular(20),
                           bottomLeft: Radius.circular(20),
@@ -64,21 +65,20 @@ class _MyHomePageState extends State<MyHomePage> {
                             bottomRight: Radius.circular(20)
                         )
                       ),
-                      child: Text(message.text, style: TextStyle(color: message.isUser ? Colors.white : Colors.black))),
+                      child: Text(message.text, style: TextStyle(color: message.isUser ? Theme.of(context).colorScheme.inversePrimary : Colors.black))),
                 ),
               );
             }),
           ),
-
           Padding(
             padding: const EdgeInsets.only(bottom: 32, top: 16, left: 16, right: 16),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(32),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Theme.of(context).colorScheme.inverseSurface.withOpacity(0.05),
                     spreadRadius: 5,
                     blurRadius: 7,
                     offset: const Offset(0,-3)
@@ -92,8 +92,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       controller: controller,
                       decoration: InputDecoration(
                         hintText: 'Write ur message',
+                        hintStyle: TextStyle(color: Colors.grey[500]),
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 20)
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 20)
                       ),
                     ),
                   ),
