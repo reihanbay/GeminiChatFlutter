@@ -1,31 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gemini_chat/onboarding.dart';
-import 'myHomePage.dart';
+import 'package:gemini_chat/themeNotifier.dart';
+import 'package:gemini_chat/themes.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  await dotenv.load(fileName: ".env");
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeProvider);
     return MaterialApp(
       title: 'Flutter Demo',
-      themeMode: ThemeMode.system,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff407BFF)),
-        useMaterial3: true,
-      ),
-      darkTheme:  ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff407BFF), brightness: Brightness.dark),
-        useMaterial3: true,
-      ),
+      themeMode: themeMode,
+      theme: lightMode,
+      darkTheme: darktMode,
       home: const OnBoarding(),
     );
   }
 }
-
-
