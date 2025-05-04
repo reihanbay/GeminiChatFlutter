@@ -24,12 +24,13 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     Message(text: "Fine thanks", isUser: false)
   ];
   TextEditingController controller = TextEditingController();
-
+  bool isLoading = false;
   callGeminiModel() async {
     try {
       if (controller.text.isNotEmpty) {
         setState(() {
           _message.add(Message(text: controller.text, isUser: true));
+          isLoading = true;
         });
       }
       final model = GenerativeModel(
@@ -41,6 +42,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
 
       setState(() {
         _message.add(Message(text: response.text!, isUser: false));
+        isLoading = false;
       });
       controller.clear();
     } catch (e) {
@@ -153,12 +155,17 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    IconButton(
-                        onPressed: callGeminiModel,
-                        icon: SvgPicture.asset('assets/send.svg',
-                            colorFilter: ColorFilter.mode(
-                                Theme.of(context).colorScheme.primary,
-                                BlendMode.srcIn)))
+                    isLoading
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator())
+                        : IconButton(
+                            onPressed: callGeminiModel,
+                            icon: SvgPicture.asset('assets/send.svg',
+                                colorFilter: ColorFilter.mode(
+                                    Theme.of(context).colorScheme.primary,
+                                    BlendMode.srcIn)))
                   ],
                 ),
               ),
